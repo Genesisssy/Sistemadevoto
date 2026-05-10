@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Elementos de la solución/">
+    <File Path="SitemaVotacioneDBEntities.Partial.cs.cs" />
+  </Folder>
+  <Project Path="SistemaVotaciones.BLL/SistemaVotaciones.BLL.csproj" Id="5282737a-f839-4514-9e34-03ccfa9a034d" />
+  <Project Path="SistemaVotaciones.DAL/SistemaVotaciones.DAL.csproj" Id="ab682f2f-a915-4e89-b38e-5b88338a0dfd" />
+  <Project Path="SistemaVotaciones.Entidades/SistemaVotaciones.Entidades.csproj" Id="53d11a3d-5a77-4875-8101-37a73056cb32" />
+  <Project Path="SistemaVotacionesFINAL/SistemaVotaciones.IU.csproj" Id="5ee831ff-cdab-4000-962b-4a720739d4ba" />
+</Solution>
