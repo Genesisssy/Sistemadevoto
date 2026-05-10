@@ -150,6 +150,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FormPlancha";
             this.Text = "FormPlancha";
+            this.Load += new System.EventHandler(this.FormPlancha_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

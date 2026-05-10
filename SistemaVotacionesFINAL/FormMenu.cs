@@ -174,6 +174,16 @@ namespace SistemaVotacionesFINAL
             btnAdministrar.Font = new Font("Segoe UI", 12, FontStyle.Bold);
             btnAdministrar.FlatStyle = FlatStyle.Flat;
             btnAdministrar.FlatAppearance.BorderSize = 0;
+
+            // 🔹 Mostrar u ocultar botón Administrar según el rol
+            if (usuarioRol == "Administrador")
+            {
+                btnAdministrar.Visible = true;
+            }
+            else
+            {
+                btnAdministrar.Visible = false;
+            }
         }
 
         private void btnAdministrar_Click(object sender, EventArgs e)

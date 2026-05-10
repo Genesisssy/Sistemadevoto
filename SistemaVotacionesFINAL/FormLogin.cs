@@ -117,7 +117,8 @@ namespace SistemaVotacionesFINAL
 
                 if (rol == "Administrador")
                 {
-                    new FormAdministrador(rol, nombre).Show();
+                    // 🔹 Enviar al menú principal, no al panel de administración
+                    new FormMenu(rol, plancha, nombre).Show();
                 }
                 else
                 {
