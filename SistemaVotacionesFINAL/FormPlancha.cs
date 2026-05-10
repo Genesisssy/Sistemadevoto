@@ -10,11 +10,19 @@ using System.Windows.Forms;
 
 namespace SistemaVotacionesFINAL
 {
-    public partial class FormPlanchas : Form
+    public partial class FormPlancha : Form
     {
-        public FormPlanchas()
+        private string nombrePlanchaEditar;
+        public FormPlancha()
         {
             InitializeComponent();
+            nombrePlanchaEditar = null;
+        }
+
+        private void btnGuardarr_Click(object sender, EventArgs e)
+        {
+
         }
     }
-}
+    }
+
