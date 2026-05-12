@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SistemaVotacionesFINAL
@@ -15,74 +9,102 @@ namespace SistemaVotacionesFINAL
         private string usuarioRol;
         private string planchaAsignada;
         private string usuarioNombre;
+        private int usuarioId;
 
         public FormMenu()
         {
             InitializeComponent();
         }
 
-        // Nuevo constructor que acepta rol y plancha
-        public FormMenu(string rol, string plancha, string nombre) : this()
+        // Constructor que acepta rol, plancha, nombre e ID
+        public FormMenu(string rol, string plancha, string nombre, int idUsuario) : this()
         {
             usuarioRol = rol;
             planchaAsignada = plancha;
-            this.Text = $"FormMenu - {rol} - {plancha}";
             usuarioNombre = nombre;
+            usuarioId = idUsuario;
+
+            this.Text = $"FormMenu - {rol} - {plancha}";
+        }
+
+        // 🔹 Método centralizado para validar acceso
+        private bool PuedeEntrar(string planchaSolicitada)
+        {
+            // Si es administrador, solo puede entrar a su propia plancha
+            if (usuarioRol == "Administrador" && planchaAsignada != planchaSolicitada)
+            {
+                MessageBox.Show("No tiene permiso para entrar a otra plancha.",
+                                "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // Si es votante, puede entrar a cualquier plancha
+            if (usuarioRol == "Votante")
+            {
+                return true;
+            }
+
+            return true;
         }
 
         private void btnplanchaazul_Click(object sender, EventArgs e)
         {
-            if (usuarioRol == "Administrador" && planchaAsignada != "Azul")
-            {
-                MessageBox.Show("No tiene permiso para entrar a otra plancha.");
-                return;
-            }
-
-            new FormPlanchaAzul().Show();
+            if (!PuedeEntrar("Azul")) return;
+            new FormPlanchaAzul(usuarioId).Show();
             this.Hide();
         }
 
         private void btnplancharoja_Click(object sender, EventArgs e)
         {
-            if (usuarioRol == "Administrador" && planchaAsignada != "Roja")
-            {
-                MessageBox.Show("No tiene permiso para entrar a otra plancha.");
-                return;
-            }
-
-            new FormPlanchaRoja().Show();
+            if (!PuedeEntrar("Roja")) return;
+            new FormPlanchaRoja(usuarioId).Show();
             this.Hide();
         }
 
         private void btnplanchaverde_Click(object sender, EventArgs e)
         {
-            if (usuarioRol == "Administrador" && planchaAsignada != "Verde")
-            {
-                MessageBox.Show("No tiene permiso para entrar a otra plancha.");
-                return;
-            }
-
-            new FormPlanchaVerde().Show();
+            if (!PuedeEntrar("Verde")) return;
+            new FormPlanchaVerde(usuarioId).Show();
             this.Hide();
         }
 
         private void btnplanchaamarilla_Click(object sender, EventArgs e)
         {
-            if (usuarioRol == "Administrador" && planchaAsignada != "Amarilla")
-            {
-                MessageBox.Show("No tiene permiso para entrar a otra plancha.");
-                return;
-            }
-
-            new FormPlanchaAmarilla().Show();
+            if (!PuedeEntrar("Amarilla")) return;
+            new FormPlanchaAmarilla(usuarioId).Show();
             this.Hide();
         }
 
         private void btnnulo_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Voto registrado como NULO.");
-            this.Hide();
-            new FormLogin().Show();
+            if (usuarioId <= 0)
+            {
+                MessageBox.Show("Error: el ID del usuario no es válido.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (VotoDAL.YaVoto(usuarioId))
+            {
+                MessageBox.Show("Ya has votado antes.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool exito = VotoDAL.RegistrarVoto(usuarioId, 0, true);
+
+            if (exito)
+            {
+                MessageBox.Show("¡Voto nulo registrado!", "Éxito",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Hide();
+                new FormResultados().Show();
+            }
+            else
+            {
+                MessageBox.Show("Error al registrar el voto nulo.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnsalir_Click(object sender, EventArgs e)
@@ -114,48 +136,17 @@ namespace SistemaVotacionesFINAL
             lblTitulo.Height = 70;
             this.Controls.Add(lblTitulo);
 
-            // Estilo de botones
-            btnplanchaazul.Text = "Plancha Azul";
-            btnplanchaazul.BackColor = Color.RoyalBlue;
-            btnplanchaazul.ForeColor = Color.White;
-            btnplanchaazul.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnplanchaazul.FlatStyle = FlatStyle.Flat;
-            btnplanchaazul.FlatAppearance.BorderSize = 0;
+            // 🔹 Estilo de botones
+            ConfigurarBoton(btnplanchaazul, "Plancha Azul", Color.RoyalBlue);
+            ConfigurarBoton(btnplancharoja, "Plancha Roja", Color.Firebrick);
+            ConfigurarBoton(btnplanchaverde, "Plancha Verde", Color.ForestGreen);
+            ConfigurarBoton(btnplanchaamarilla, "Plancha Amarilla", Color.Goldenrod);
+            ConfigurarBoton(btnnulo, "Voto Nulo", Color.Gray);
+            ConfigurarBoton(btnsalir, "Salir", Color.DarkSlateGray);
+            ConfigurarBoton(btnAdministrar, "Administrar", Color.DarkOrange);
 
-            btnplancharoja.Text = "Plancha Roja";
-            btnplancharoja.BackColor = Color.Firebrick;
-            btnplancharoja.ForeColor = Color.White;
-            btnplancharoja.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnplancharoja.FlatStyle = FlatStyle.Flat;
-            btnplancharoja.FlatAppearance.BorderSize = 0;
-
-            btnplanchaverde.Text = "Plancha Verde";
-            btnplanchaverde.BackColor = Color.ForestGreen;
-            btnplanchaverde.ForeColor = Color.White;
-            btnplanchaverde.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnplanchaverde.FlatStyle = FlatStyle.Flat;
-            btnplanchaverde.FlatAppearance.BorderSize = 0;
-
-            btnplanchaamarilla.Text = "Plancha Amarilla";
-            btnplanchaamarilla.BackColor = Color.Goldenrod;
-            btnplanchaamarilla.ForeColor = Color.White;
-            btnplanchaamarilla.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnplanchaamarilla.FlatStyle = FlatStyle.Flat;
-            btnplanchaamarilla.FlatAppearance.BorderSize = 0;
-
-            btnnulo.Text = "Voto Nulo";
-            btnnulo.BackColor = Color.Gray;
-            btnnulo.ForeColor = Color.White;
-            btnnulo.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnnulo.FlatStyle = FlatStyle.Flat;
-            btnnulo.FlatAppearance.BorderSize = 0;
-
-            btnsalir.Text = "Salir";
-            btnsalir.BackColor = Color.DarkSlateGray;
-            btnsalir.ForeColor = Color.White;
-            btnsalir.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnsalir.FlatStyle = FlatStyle.Flat;
-            btnsalir.FlatAppearance.BorderSize = 0;
+            // 🔹 Mostrar u ocultar botón Administrar según el rol
+            btnAdministrar.Visible = usuarioRol == "Administrador";
 
             // Footer
             Label lblFooter = new Label();
@@ -166,24 +157,16 @@ namespace SistemaVotacionesFINAL
             lblFooter.Dock = DockStyle.Bottom;
             lblFooter.Height = 40;
             this.Controls.Add(lblFooter);
+        }
 
-            // Botón Administrar
-            btnAdministrar.Text = "Administrar";
-            btnAdministrar.BackColor = Color.DarkOrange;
-            btnAdministrar.ForeColor = Color.White;
-            btnAdministrar.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            btnAdministrar.FlatStyle = FlatStyle.Flat;
-            btnAdministrar.FlatAppearance.BorderSize = 0;
-
-            // 🔹 Mostrar u ocultar botón Administrar según el rol
-            if (usuarioRol == "Administrador")
-            {
-                btnAdministrar.Visible = true;
-            }
-            else
-            {
-                btnAdministrar.Visible = false;
-            }
+        private void ConfigurarBoton(Button boton, string texto, Color colorFondo)
+        {
+            boton.Text = texto;
+            boton.BackColor = colorFondo;
+            boton.ForeColor = Color.White;
+            boton.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            boton.FlatStyle = FlatStyle.Flat;
+            boton.FlatAppearance.BorderSize = 0;
         }
 
         private void btnAdministrar_Click(object sender, EventArgs e)
@@ -200,5 +183,3 @@ namespace SistemaVotacionesFINAL
         }
     }
 }
-
-

@@ -6,94 +6,144 @@ namespace SistemaVotacionesFINAL
 {
     public partial class FormPlancha : Form
     {
-        private string nombrePlanchaEditar;
-
         public FormPlancha()
         {
             InitializeComponent();
-            nombrePlanchaEditar = null;
         }
 
         private void FormPlancha_Load(object sender, EventArgs e)
         {
             this.Text = "Gestión de Planchas";
             this.BackColor = Color.LightGray;
-            this.Size = new Size(600, 400);
+            this.Size = new Size(700, 450);
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // 🔹 Título principal
+            // 🔹 Título centrado
             Label lblTitulo = new Label();
             lblTitulo.Text = "Registro de Planchas";
-            lblTitulo.Font = new Font("Segoe UI", 18, FontStyle.Bold);
+            lblTitulo.Font = new Font("Segoe UI", 22, FontStyle.Bold);
             lblTitulo.ForeColor = Color.DimGray;
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
             lblTitulo.Dock = DockStyle.Top;
-            lblTitulo.Height = 60;
+            lblTitulo.Height = 80;
             this.Controls.Add(lblTitulo);
 
-            // 🔹 Etiquetas y cajas de texto
-            string[] etiquetas = { "Nombre de Plancha:", "Presidente:", "Vicepresidente:", "Tesorero:", "Secretario:" };
-            TextBox[] cajas = new TextBox[5];
+            // 🔹 Asignar texto a tus labels
+            lblnombreplancha.Text = "Nombre de Plancha:";
+            lblpresidente.Text = "Presidente:";
+            lblvicepresidente.Text = "Vicepresidente:";
+            lbltesorero.Text = "Tesorero:";
+            lblsecretario.Text = "Secretario:";
 
-            int y = 90;
-            for (int i = 0; i < etiquetas.Length; i++)
+            // 🔹 Estilo general para etiquetas
+            Font fuenteEtiqueta = new Font("Segoe UI", 12, FontStyle.Bold);
+            Color colorEtiqueta = Color.Black;
+
+            lblnombreplancha.Font = fuenteEtiqueta;
+            lblpresidente.Font = fuenteEtiqueta;
+            lblvicepresidente.Font = fuenteEtiqueta;
+            lbltesorero.Font = fuenteEtiqueta;
+            lblsecretario.Font = fuenteEtiqueta;
+
+            lblnombreplancha.ForeColor = colorEtiqueta;
+            lblpresidente.ForeColor = colorEtiqueta;
+            lblvicepresidente.ForeColor = colorEtiqueta;
+            lbltesorero.ForeColor = colorEtiqueta;
+            lblsecretario.ForeColor = colorEtiqueta;
+
+            // 🔹 Posiciones y tamaños (alineadas)
+            int xLabel = 150;
+            int xText = 340;
+            int yStart = 120;
+            int espacio = 45;
+
+            lblnombreplancha.Location = new Point(xLabel, yStart);
+            txtnombreplancha.Location = new Point(xText, yStart);
+            txtnombreplancha.Size = new Size(280, 30);
+
+            lblpresidente.Location = new Point(xLabel, yStart + espacio);
+            txtpresidente.Location = new Point(xText, yStart + espacio);
+            txtpresidente.Size = new Size(280, 30);
+
+            lblvicepresidente.Location = new Point(xLabel, yStart + espacio * 2);
+            txtvicepresidente.Location = new Point(xText, yStart + espacio * 2);
+            txtvicepresidente.Size = new Size(280, 30);
+
+            lbltesorero.Location = new Point(xLabel, yStart + espacio * 3);
+            txttesorero.Location = new Point(xText, yStart + espacio * 3);
+            txttesorero.Size = new Size(280, 30);
+
+            lblsecretario.Location = new Point(xLabel, yStart + espacio * 4);
+            txtsecretario.Location = new Point(xText, yStart + espacio * 4);
+            txtsecretario.Size = new Size(280, 30);
+
+            // 🔹 Estilo de los TextBox
+            Font fuenteCaja = new Font("Segoe UI", 11);
+            txtnombreplancha.Font = fuenteCaja;
+            txtpresidente.Font = fuenteCaja;
+            txtvicepresidente.Font = fuenteCaja;
+            txttesorero.Font = fuenteCaja;
+            txtsecretario.Font = fuenteCaja;
+
+            // 🔹 Botones
+            btnGuardarr.Text = "Registrar Plancha";
+            btnGuardarr.BackColor = Color.DimGray;
+            btnGuardarr.ForeColor = Color.White;
+            btnGuardarr.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            btnGuardarr.FlatStyle = FlatStyle.Flat;
+            btnGuardarr.FlatAppearance.BorderSize = 0;
+            btnGuardarr.Size = new Size(180, 45);
+            btnGuardarr.Location = new Point(200, 360);
+
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.BackColor = Color.DarkRed;
+            btnCancelar.ForeColor = Color.White;
+            btnCancelar.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            btnCancelar.FlatStyle = FlatStyle.Flat;
+            btnCancelar.FlatAppearance.BorderSize = 0;
+            btnCancelar.Size = new Size(180, 45);
+            btnCancelar.Location = new Point(400, 360);
+        }
+
+        // 🔹 Botón Guardar (Registrar Plancha)
+        private void btnGuardarr_Click(object sender, EventArgs e)
+        {
+            string nombre = txtnombreplancha.Text.Trim();
+            string presidente = txtpresidente.Text.Trim();
+            string vice = txtvicepresidente.Text.Trim();
+            string tesorero = txttesorero.Text.Trim();
+            string secretario = txtsecretario.Text.Trim();
+
+            if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(presidente))
             {
-                Label lbl = new Label();
-                lbl.Text = etiquetas[i];
-                lbl.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-                lbl.ForeColor = Color.Black;
-                lbl.Location = new Point(80, y);
-                lbl.Size = new Size(150, 25);
-                this.Controls.Add(lbl);
-
-                cajas[i] = new TextBox();
-                cajas[i].Name = $"txt{i}";
-                cajas[i].Size = new Size(250, 25);
-                cajas[i].Location = new Point(240, y);
-                cajas[i].Font = new Font("Segoe UI", 10);
-                this.Controls.Add(cajas[i]);
-
-                y += 40;
+                MessageBox.Show("Complete los campos obligatorios (Nombre y Presidente).", "Campos vacíos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            // 🔹 Botón Guardar
-            Button btnGuardar = new Button();
-            btnGuardar.Text = "Registrar Plancha";
-            btnGuardar.BackColor = Color.DimGray;
-            btnGuardar.ForeColor = Color.White;
-            btnGuardar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-            btnGuardar.FlatStyle = FlatStyle.Flat;
-            btnGuardar.FlatAppearance.BorderSize = 0;
-            btnGuardar.Size = new Size(180, 40);
-            btnGuardar.Location = new Point(120, 300);
-            btnGuardar.Click += BtnGuardar_Click;
-            this.Controls.Add(btnGuardar);
-
-            // 🔹 Botón Actualizar
-            Button btnActualizar = new Button();
-            btnActualizar.Text = "Actualizar Plancha";
-            btnActualizar.BackColor = Color.Gray;
-            btnActualizar.ForeColor = Color.White;
-            btnActualizar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-            btnActualizar.FlatStyle = FlatStyle.Flat;
-            btnActualizar.FlatAppearance.BorderSize = 0;
-            btnActualizar.Size = new Size(180, 40);
-            btnActualizar.Location = new Point(320, 300);
-            btnActualizar.Click += BtnActualizar_Click;
-            this.Controls.Add(btnActualizar);
+            try
+            {
+                // 🔹 Ahora InsertarPlancha recibe 5 parámetros
+                UsuarioDAL.InsertarPlancha(nombre, presidente, vice, tesorero, secretario);
+                MessageBox.Show("Plancha registrada correctamente.", "Éxito",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al registrar la plancha: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void BtnGuardar_Click(object sender, EventArgs e)
+        // 🔹 Botón Cancelar
+        private void btnCancelar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Plancha registrada correctamente.", "Éxito",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
         }
 
-        private void BtnActualizar_Click(object sender, EventArgs e)
+        private void label1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Plancha actualizada correctamente.", "Éxito",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
-

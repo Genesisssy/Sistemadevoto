@@ -34,7 +34,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 505);
             this.Name = "FormPlanchaRoja";
             this.Text = "FormPlanchaRoja";
             this.Load += new System.EventHandler(this.FormPlanchaRoja_Load);

@@ -90,7 +90,6 @@ namespace SistemaVotacionesFINAL
             lblFooter.Height = 30;
             this.Controls.Add(lblFooter);
         }
-       
 
         private void btnlogin_Click(object sender, EventArgs e)
         {
@@ -104,7 +103,10 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            if (UsuarioDAL.ValidarCredenciales(matricula, password))
+            // 🔹 Validar usuario y obtener su Id
+            int usuarioId = UsuarioDAL.ValidarUsuario(matricula, password);
+
+            if (usuarioId > 0)
             {
                 bool esAdmin = UsuarioDAL.EsAdministrador(matricula);
                 string rol = esAdmin ? "Administrador" : "Votante";
@@ -112,19 +114,11 @@ namespace SistemaVotacionesFINAL
                 string plancha = UsuarioDAL.ObtenerPlancha(matricula);
                 string nombre = UsuarioDAL.ObtenerNombre(matricula);
 
-                MessageBox.Show($"Bienvenido {rol}", "Inicio exitoso",
+                MessageBox.Show($"Bienvenido {nombre} ({rol})", "Inicio exitoso",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                if (rol == "Administrador")
-                {
-                    // 🔹 Enviar al menú principal, no al panel de administración
-                    new FormMenu(rol, plancha, nombre).Show();
-                }
-                else
-                {
-                    new FormMenu(rol, plancha, nombre).Show();
-                }
-
+                // 🔹 Pasamos los 4 parámetros al menú
+                new FormMenu(rol, plancha, nombre, usuarioId).Show();
                 this.Hide();
             }
             else

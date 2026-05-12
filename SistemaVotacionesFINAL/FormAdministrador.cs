@@ -47,11 +47,37 @@ namespace SistemaVotacionesFINAL
 
         private void btnEliminarUsuario_Click(object sender, EventArgs e)
         {
-            if (dgvUsuarios.CurrentRow != null)
+            if (dgvUsuarios.SelectedRows.Count > 0)
             {
-                string matricula = dgvUsuarios.CurrentRow.Cells["Matricula"].Value.ToString();
-                UsuarioDAL.EliminarUsuario(matricula);
-                CargarUsuarios();
+                string rolSeleccionado = dgvUsuarios.SelectedRows[0].Cells["Rol"].Value.ToString();
+
+                if (rolSeleccionado != "Votante")
+                {
+                    MessageBox.Show("Solo se pueden eliminar votantes desde aquí.",
+                                    "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int idSeleccionado = Convert.ToInt32(dgvUsuarios.SelectedRows[0].Cells["Id"].Value);
+
+                bool exito = UsuarioDAL.EliminarUsuario(idSeleccionado);
+
+                if (exito)
+                {
+                    MessageBox.Show("Votante eliminado correctamente ✅", "Éxito",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    CargarUsuarios();
+                }
+                else
+                {
+                    MessageBox.Show("Error al eliminar el votante.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Seleccione un votante para eliminar.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -181,7 +207,7 @@ namespace SistemaVotacionesFINAL
         private void btnvolveralmenu_Click(object sender, EventArgs e)
         {
             this.Hide();
-            FormMenu frm = new FormMenu("Usuario", "Roja", "NombreUsuario");
+            FormMenu frm = new FormMenu(usuarioRol, "Roja", usuarioNombre, 0);
             frm.Show();
         }
     }

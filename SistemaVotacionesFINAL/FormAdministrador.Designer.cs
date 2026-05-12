@@ -89,7 +89,7 @@
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(260, 274);
+            this.dgvUsuarios.Size = new System.Drawing.Size(444, 301);
             this.dgvUsuarios.TabIndex = 8;
             // 
             // btnCrearPlancha
@@ -146,7 +146,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1119, 657);
+            this.ClientSize = new System.Drawing.Size(1119, 781);
             this.Controls.Add(this.btnVerDetalles);
             this.Controls.Add(this.dvresultado);
             this.Controls.Add(this.btnEliminarPlancha);

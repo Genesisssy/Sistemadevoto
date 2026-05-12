@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace SistemaVotacionesFINAL
@@ -14,20 +15,15 @@ namespace SistemaVotacionesFINAL
 
         private void FormResultados_Load(object sender, EventArgs e)
         {
-            // 🔹 Configuración general del formulario
+            // 🔹 Configuración general
             this.Text = "Resultados de Votación";
             this.BackColor = Color.Beige;
-            this.StartPosition = FormStartPosition.CenterScreen;
 
-            // 🔹 Estilo del título (usa el label del diseñador, ej. label1)
-            label1.Text = "Resultados de Votación";
-            label1.Font = new Font("Segoe UI", 18, FontStyle.Bold);
-            label1.ForeColor = Color.DarkOliveGreen;
-            label1.TextAlign = ContentAlignment.MiddleCenter;
-            label1.Dock = DockStyle.Top;
-            label1.Height = 60;
+            lblTitulo.Text = "Resultados de Votación";
+            lblTitulo.Font = new Font("Segoe UI", 20, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.DarkOliveGreen;
+            lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
 
-            // 🔹 Estilo del DataGridView (usa el del diseñador, ej. dgvResultadosDetallados)
             dgvResultadosDetallados.BackgroundColor = Color.WhiteSmoke;
             dgvResultadosDetallados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvResultadosDetallados.ReadOnly = true;
@@ -35,23 +31,69 @@ namespace SistemaVotacionesFINAL
             dgvResultadosDetallados.AllowUserToDeleteRows = false;
             dgvResultadosDetallados.BorderStyle = BorderStyle.FixedSingle;
 
-            // 🔹 Estilo del botón (usa el del diseñador, ej. btnCerrar)
-            btnCerrar.Text = "Cancelar";
-            btnCerrar.BackColor = Color.Peru;
-            btnCerrar.ForeColor = Color.White;
-            btnCerrar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-            btnCerrar.FlatStyle = FlatStyle.Flat;
-            btnCerrar.FlatAppearance.BorderSize = 0;
-            btnCerrar.Click += BtnCancelar_Click;
+            btnactualizar.Text = "Actualizar";
+            btnactualizar.BackColor = Color.RoyalBlue;
+            btnactualizar.ForeColor = Color.White;
+            btnactualizar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            btnactualizar.FlatStyle = FlatStyle.Flat;
+            btnactualizar.FlatAppearance.BorderSize = 0;
+            btnactualizar.Click += btnactualizar_Click;
 
-            // 🔹 Cargar datos desde BD
-            dgvResultadosDetallados.DataSource = UsuarioDAL.ObtenerResultados();
+            btnCANCELAR.Text = "Cancelar";
+            btnCANCELAR.BackColor = Color.Peru;
+            btnCANCELAR.ForeColor = Color.White;
+            btnCANCELAR.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            btnCANCELAR.FlatStyle = FlatStyle.Flat;
+            btnCANCELAR.FlatAppearance.BorderSize = 0;
+            btnCANCELAR.Click += BtnCancelar_Click;
+
+            lblMensaje.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            lblMensaje.ForeColor = Color.DarkSlateGray;
+            lblMensaje.TextAlign = ContentAlignment.MiddleCenter;
+
+            // 🔹 Cargar datos iniciales
+            CargarResultados();
         }
 
         private void BtnCancelar_Click(object sender, EventArgs e)
         {
-            this.Close(); // Cierra el formulario
+            this.Close();
+        }
+
+        private void CargarResultados()
+        {
+            DataTable resultados = UsuarioDAL.ObtenerResultados();
+            dgvResultadosDetallados.DataSource = resultados;
+
+            if (resultados.Rows.Count == 0)
+            {
+                lblMensaje.Text = "No hay votos registrados aún.";
+                return;
+            }
+
+            int maxVotos = resultados.AsEnumerable().Max(r => Convert.ToInt32(r["TotalVotos"]));
+            var ganadores = resultados.AsEnumerable()
+                .Where(r => Convert.ToInt32(r["TotalVotos"]) == maxVotos)
+                .Select(r => r["Plancha"].ToString())
+                .ToList();
+
+            if (ganadores.Count == 1)
+            {
+                lblMensaje.Text = $"¡Plancha {ganadores[0]} va ganando con {maxVotos} votos!";
+                lblMensaje.ForeColor = Color.DarkGreen;
+            }
+            else
+            {
+                lblMensaje.Text = $"Empate entre {string.Join(" y ", ganadores)} con {maxVotos} votos cada uno.";
+                lblMensaje.ForeColor = Color.DarkOrange;
+            }
+        }
+    
+
+private void btnactualizar_Click(object sender, EventArgs e)
+        {
+
+            CargarResultados();
         }
     }
 }
-

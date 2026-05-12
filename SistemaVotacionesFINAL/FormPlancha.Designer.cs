@@ -28,55 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtNombrePlancha = new System.Windows.Forms.TextBox();
-            this.txtPresidente = new System.Windows.Forms.TextBox();
-            this.txtVicepresidente = new System.Windows.Forms.TextBox();
-            this.txtTesorero = new System.Windows.Forms.TextBox();
             this.btnGuardarr = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.txtnombreplancha = new System.Windows.Forms.TextBox();
+            this.txtpresidente = new System.Windows.Forms.TextBox();
+            this.txtvicepresidente = new System.Windows.Forms.TextBox();
+            this.txttesorero = new System.Windows.Forms.TextBox();
+            this.lblsecretario = new System.Windows.Forms.Label();
+            this.lblnombreplancha = new System.Windows.Forms.Label();
+            this.lblpresidente = new System.Windows.Forms.Label();
+            this.lblvicepresidente = new System.Windows.Forms.Label();
+            this.lbltesorero = new System.Windows.Forms.Label();
+            this.txtsecretario = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(325, 73);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 20);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
-            // 
-            // txtNombrePlancha
-            // 
-            this.txtNombrePlancha.Location = new System.Drawing.Point(59, 133);
-            this.txtNombrePlancha.Name = "txtNombrePlancha";
-            this.txtNombrePlancha.Size = new System.Drawing.Size(100, 26);
-            this.txtNombrePlancha.TabIndex = 1;
-            // 
-            // txtPresidente
-            // 
-            this.txtPresidente.Location = new System.Drawing.Point(59, 205);
-            this.txtPresidente.Name = "txtPresidente";
-            this.txtPresidente.Size = new System.Drawing.Size(100, 26);
-            this.txtPresidente.TabIndex = 2;
-            // 
-            // txtVicepresidente
-            // 
-            this.txtVicepresidente.Location = new System.Drawing.Point(59, 280);
-            this.txtVicepresidente.Name = "txtVicepresidente";
-            this.txtVicepresidente.Size = new System.Drawing.Size(100, 26);
-            this.txtVicepresidente.TabIndex = 3;
-            // 
-            // txtTesorero
-            // 
-            this.txtTesorero.Location = new System.Drawing.Point(59, 355);
-            this.txtTesorero.Name = "txtTesorero";
-            this.txtTesorero.Size = new System.Drawing.Size(100, 26);
-            this.txtTesorero.TabIndex = 4;
             // 
             // btnGuardarr
             // 
@@ -86,6 +50,7 @@
             this.btnGuardarr.TabIndex = 5;
             this.btnGuardarr.Text = "button1";
             this.btnGuardarr.UseVisualStyleBackColor = true;
+            this.btnGuardarr.Click += new System.EventHandler(this.btnGuardarr_Click);
             // 
             // btnCancelar
             // 
@@ -95,59 +60,106 @@
             this.btnCancelar.TabIndex = 6;
             this.btnCancelar.Text = "button2";
             this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
-            // label2
+            // txtnombreplancha
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(240, 139);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 20);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "label2";
+            this.txtnombreplancha.Location = new System.Drawing.Point(345, 117);
+            this.txtnombreplancha.Name = "txtnombreplancha";
+            this.txtnombreplancha.Size = new System.Drawing.Size(100, 26);
+            this.txtnombreplancha.TabIndex = 7;
             // 
-            // label3
+            // txtpresidente
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(240, 211);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 20);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "label3";
+            this.txtpresidente.Location = new System.Drawing.Point(345, 167);
+            this.txtpresidente.Name = "txtpresidente";
+            this.txtpresidente.Size = new System.Drawing.Size(100, 26);
+            this.txtpresidente.TabIndex = 8;
             // 
-            // label4
+            // txtvicepresidente
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(240, 286);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(51, 20);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "label4";
+            this.txtvicepresidente.Location = new System.Drawing.Point(345, 221);
+            this.txtvicepresidente.Name = "txtvicepresidente";
+            this.txtvicepresidente.Size = new System.Drawing.Size(100, 26);
+            this.txtvicepresidente.TabIndex = 9;
             // 
-            // label5
+            // txttesorero
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(240, 358);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(51, 20);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "label5";
+            this.txttesorero.Location = new System.Drawing.Point(345, 281);
+            this.txttesorero.Name = "txttesorero";
+            this.txttesorero.Size = new System.Drawing.Size(100, 26);
+            this.txttesorero.TabIndex = 10;
+            // 
+            // lblsecretario
+            // 
+            this.lblsecretario.AutoSize = true;
+            this.lblsecretario.Location = new System.Drawing.Point(150, 349);
+            this.lblsecretario.Name = "lblsecretario";
+            this.lblsecretario.Size = new System.Drawing.Size(51, 20);
+            this.lblsecretario.TabIndex = 16;
+            this.lblsecretario.Text = "label1";
+            // 
+            // lblnombreplancha
+            // 
+            this.lblnombreplancha.AutoSize = true;
+            this.lblnombreplancha.Location = new System.Drawing.Point(150, 123);
+            this.lblnombreplancha.Name = "lblnombreplancha";
+            this.lblnombreplancha.Size = new System.Drawing.Size(51, 20);
+            this.lblnombreplancha.TabIndex = 12;
+            this.lblnombreplancha.Text = "label1";
+            this.lblnombreplancha.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // lblpresidente
+            // 
+            this.lblpresidente.AutoSize = true;
+            this.lblpresidente.Location = new System.Drawing.Point(150, 173);
+            this.lblpresidente.Name = "lblpresidente";
+            this.lblpresidente.Size = new System.Drawing.Size(51, 20);
+            this.lblpresidente.TabIndex = 13;
+            this.lblpresidente.Text = "label1";
+            // 
+            // lblvicepresidente
+            // 
+            this.lblvicepresidente.AutoSize = true;
+            this.lblvicepresidente.Location = new System.Drawing.Point(150, 227);
+            this.lblvicepresidente.Name = "lblvicepresidente";
+            this.lblvicepresidente.Size = new System.Drawing.Size(51, 20);
+            this.lblvicepresidente.TabIndex = 14;
+            this.lblvicepresidente.Text = "label1";
+            // 
+            // lbltesorero
+            // 
+            this.lbltesorero.AutoSize = true;
+            this.lbltesorero.Location = new System.Drawing.Point(150, 281);
+            this.lbltesorero.Name = "lbltesorero";
+            this.lbltesorero.Size = new System.Drawing.Size(51, 20);
+            this.lbltesorero.TabIndex = 15;
+            this.lbltesorero.Text = "label1";
+            // 
+            // txtsecretario
+            // 
+            this.txtsecretario.Location = new System.Drawing.Point(345, 343);
+            this.txtsecretario.Name = "txtsecretario";
+            this.txtsecretario.Size = new System.Drawing.Size(100, 26);
+            this.txtsecretario.TabIndex = 11;
             // 
             // FormPlancha
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 607);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblsecretario);
+            this.Controls.Add(this.lbltesorero);
+            this.Controls.Add(this.lblvicepresidente);
+            this.Controls.Add(this.lblpresidente);
+            this.Controls.Add(this.lblnombreplancha);
+            this.Controls.Add(this.txtsecretario);
+            this.Controls.Add(this.txttesorero);
+            this.Controls.Add(this.txtvicepresidente);
+            this.Controls.Add(this.txtpresidente);
+            this.Controls.Add(this.txtnombreplancha);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnGuardarr);
-            this.Controls.Add(this.txtTesorero);
-            this.Controls.Add(this.txtVicepresidente);
-            this.Controls.Add(this.txtPresidente);
-            this.Controls.Add(this.txtNombrePlancha);
-            this.Controls.Add(this.label1);
             this.Name = "FormPlancha";
             this.Text = "FormPlancha";
             this.Load += new System.EventHandler(this.FormPlancha_Load);
@@ -157,17 +169,17 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtNombrePlancha;
-        private System.Windows.Forms.TextBox txtPresidente;
-        private System.Windows.Forms.TextBox txtVicepresidente;
-        private System.Windows.Forms.TextBox txtTesorero;
         private System.Windows.Forms.Button btnGuardarr;
         private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtnombreplancha;
+        private System.Windows.Forms.TextBox txtpresidente;
+        private System.Windows.Forms.TextBox txtvicepresidente;
+        private System.Windows.Forms.TextBox txttesorero;
+        private System.Windows.Forms.Label lblsecretario;
+        private System.Windows.Forms.Label lblnombreplancha;
+        private System.Windows.Forms.Label lblpresidente;
+        private System.Windows.Forms.Label lblvicepresidente;
+        private System.Windows.Forms.Label lbltesorero;
+        private System.Windows.Forms.TextBox txtsecretario;
     }
 }
