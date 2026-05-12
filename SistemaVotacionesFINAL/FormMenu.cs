@@ -16,7 +16,6 @@ namespace SistemaVotacionesFINAL
             InitializeComponent();
         }
 
-        // Constructor que acepta rol, plancha, nombre e ID
         public FormMenu(string rol, string plancha, string nombre, int idUsuario) : this()
         {
             usuarioRol = rol;
@@ -27,26 +26,18 @@ namespace SistemaVotacionesFINAL
             this.Text = $"FormMenu - {rol} - {plancha}";
         }
 
-        // 🔹 Método centralizado para validar acceso
         private bool PuedeEntrar(string planchaSolicitada)
         {
-            // Si es administrador, solo puede entrar a su propia plancha
             if (usuarioRol == "Administrador" && planchaAsignada != planchaSolicitada)
             {
                 MessageBox.Show("No tiene permiso para entrar a otra plancha.",
                                 "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
-
-            // Si es votante, puede entrar a cualquier plancha
-            if (usuarioRol == "Votante")
-            {
-                return true;
-            }
-
             return true;
         }
 
+        // 🔹 Botones de planchas: ahora abren el formulario correspondiente
         private void btnplanchaazul_Click(object sender, EventArgs e)
         {
             if (!PuedeEntrar("Azul")) return;
@@ -75,6 +66,7 @@ namespace SistemaVotacionesFINAL
             this.Hide();
         }
 
+        // 🔹 El voto nulo sí se registra directo
         private void btnnulo_Click(object sender, EventArgs e)
         {
             if (usuarioId <= 0)
@@ -84,21 +76,22 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            if (VotoDAL.YaVoto(usuarioId))
+            if (UsuarioDAL.YaVoto(usuarioId))
             {
                 MessageBox.Show("Ya has votado antes.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioId, 0, true);
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioId, 0, true);
 
             if (exito)
             {
                 MessageBox.Show("¡Voto nulo registrado!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Hide();
-                new FormResultados().Show();
+                new FormResultados().ShowDialog();
+                this.Close();
             }
             else
             {
@@ -126,7 +119,6 @@ namespace SistemaVotacionesFINAL
             lblUsuario.Height = 40;
             this.Controls.Add(lblUsuario);
 
-            // Encabezado
             Label lblTitulo = new Label();
             lblTitulo.Text = "Menú de Votación";
             lblTitulo.Font = new Font("Segoe UI", 22, FontStyle.Bold);
@@ -136,7 +128,6 @@ namespace SistemaVotacionesFINAL
             lblTitulo.Height = 70;
             this.Controls.Add(lblTitulo);
 
-            // 🔹 Estilo de botones
             ConfigurarBoton(btnplanchaazul, "Plancha Azul", Color.RoyalBlue);
             ConfigurarBoton(btnplancharoja, "Plancha Roja", Color.Firebrick);
             ConfigurarBoton(btnplanchaverde, "Plancha Verde", Color.ForestGreen);
@@ -145,10 +136,8 @@ namespace SistemaVotacionesFINAL
             ConfigurarBoton(btnsalir, "Salir", Color.DarkSlateGray);
             ConfigurarBoton(btnAdministrar, "Administrar", Color.DarkOrange);
 
-            // 🔹 Mostrar u ocultar botón Administrar según el rol
             btnAdministrar.Visible = usuarioRol == "Administrador";
 
-            // Footer
             Label lblFooter = new Label();
             lblFooter.Text = "Seleccione su plancha o voto nulo";
             lblFooter.Font = new Font("Segoe UI", 10, FontStyle.Italic);

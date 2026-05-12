@@ -6,8 +6,8 @@ namespace SistemaVotacionesFINAL
 {
     public partial class FormPlanchaVerde : Form
     {
-        int usuarioIdActual;
-        int planchaId = 3; // Verde
+        private int usuarioIdActual;
+        private int planchaId = 3; // Verde
 
         public FormPlanchaVerde()
         {
@@ -22,6 +22,7 @@ namespace SistemaVotacionesFINAL
 
         private void FormPlanchaVerde_Load(object sender, EventArgs e)
         {
+            VotacionHelper.IniciarTimer(this, usuarioIdActual, 20, planchaId);
             // Fondo general
             this.BackColor = Color.Honeydew;
             this.Text = "Plancha Verde";
@@ -119,19 +120,21 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            if (VotoDAL.YaVoto(usuarioIdActual))
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
             {
                 MessageBox.Show("Ya has votado antes.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, planchaId);
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, planchaId, false);
 
             if (exito)
             {
-                MessageBox.Show("Voto registrado correctamente en Plancha Verde ✅", "Éxito",
+                MessageBox.Show("¡Voto registrado en Plancha Verde!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Hide();
+                new FormResultados().ShowDialog();
                 this.Close();
             }
             else
@@ -156,13 +159,22 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, 0, true);
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
+            {
+                MessageBox.Show("Ya has votado antes.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, 0, true);
+
             if (exito)
             {
                 MessageBox.Show("¡Voto nulo registrado!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Hide();
-                new FormResultados().Show();
+                new FormResultados().ShowDialog();
+                this.Close();
             }
             else
             {
@@ -172,5 +184,3 @@ namespace SistemaVotacionesFINAL
         }
     }
 }
-
-

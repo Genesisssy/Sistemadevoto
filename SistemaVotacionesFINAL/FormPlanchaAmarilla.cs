@@ -6,8 +6,8 @@ namespace SistemaVotacionesFINAL
 {
     public partial class FormPlanchaAmarilla : Form
     {
-        int usuarioIdActual;
-        int planchaId = 4; // Amarilla
+        private int usuarioIdActual;   // 🔹 variable correcta
+        private int planchaId = 4;     // Amarilla
 
         public FormPlanchaAmarilla()
         {
@@ -22,6 +22,7 @@ namespace SistemaVotacionesFINAL
 
         private void FormPlanchaAmarilla_Load(object sender, EventArgs e)
         {
+            VotacionHelper.IniciarTimer(this, usuarioIdActual, 15, planchaId);
             this.BackColor = Color.LemonChiffon;
             this.Text = "Plancha Amarilla";
 
@@ -75,13 +76,6 @@ namespace SistemaVotacionesFINAL
                 x += 230;
             }
 
-            // 🔹 Panel inferior para botones (más arriba del borde)
-            Panel panelBotones = new Panel();
-            panelBotones.Dock = DockStyle.Bottom;
-            panelBotones.Height = 140; // más alto para que los botones queden más arriba
-            panelBotones.BackColor = Color.Transparent;
-            this.Controls.Add(panelBotones);
-
             // Botón Confirmar Voto
             Button btnConfirmar = new Button();
             btnConfirmar.Text = "Confirmar Voto";
@@ -89,8 +83,8 @@ namespace SistemaVotacionesFINAL
             btnConfirmar.ForeColor = Color.White;
             btnConfirmar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnConfirmar.Size = new Size(160, 45);
-            btnConfirmar.Location = new Point(120, 350); // posición ajustada
-            btnConfirmar.Click += BtnConfirmar_Click; // evento del form amarillo
+            btnConfirmar.Location = new Point(120, 350);
+            btnConfirmar.Click += BtnConfirmar_Click;
             this.Controls.Add(btnConfirmar);
 
             // Botón Volver al Menú
@@ -116,29 +110,23 @@ namespace SistemaVotacionesFINAL
             this.Controls.Add(btnNulo);
         }
 
-
         private void BtnConfirmar_Click(object sender, EventArgs e)
         {
-            if (usuarioIdActual <= 0)
-            {
-                MessageBox.Show("Error: el ID del usuario no es válido.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (VotoDAL.YaVoto(usuarioIdActual))
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
             {
                 MessageBox.Show("Ya has votado antes.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, planchaId);
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, planchaId, false);
 
             if (exito)
             {
-                MessageBox.Show("Voto registrado correctamente en Plancha Amarilla ✅", "Éxito",
+                MessageBox.Show("¡Voto registrado en Plancha Amarilla!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Hide();
+                new FormResultados().ShowDialog();
                 this.Close();
             }
             else
@@ -163,20 +151,21 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            if (VotoDAL.YaVoto(usuarioIdActual))
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
             {
                 MessageBox.Show("Ya has votado antes.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, 0, true);
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, 0, true);
             if (exito)
             {
                 MessageBox.Show("¡Voto nulo registrado!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Hide();
-                new FormResultados().Show();
+                new FormResultados().ShowDialog();
+                this.Close();
             }
             else
             {
@@ -186,3 +175,4 @@ namespace SistemaVotacionesFINAL
         }
     }
 }
+

@@ -6,9 +6,18 @@ namespace SistemaVotacionesFINAL
 {
     public partial class FormRegistro : Form
     {
+        private string matriculaEditar; // opcional: para edición
+
         public FormRegistro()
         {
             InitializeComponent();
+        }
+
+        // 🔹 Constructor opcional para edición
+        public FormRegistro(string matricula) : this()
+        {
+            matriculaEditar = matricula;
+            CargarDatosUsuario(matriculaEditar);
         }
 
         private void btnregistrofinal_Click(object sender, EventArgs e)
@@ -28,21 +37,43 @@ namespace SistemaVotacionesFINAL
 
             try
             {
-                bool registrado = UsuarioDAL.RegistrarUsuario(matricula, nombre, password, curso, seccion);
+                bool registrado;
 
-                if (!registrado)
+                if (string.IsNullOrEmpty(matriculaEditar))
                 {
-                    MessageBox.Show("Ya existe un usuario con esa matrícula.", "Duplicado",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    // 🔹 Registro nuevo
+                    registrado = UsuarioDAL.RegistrarUsuario(matricula, nombre, password, curso, seccion);
+
+                    if (!registrado)
+                    {
+                        MessageBox.Show("Ya existe un usuario con esa matrícula.", "Duplicado",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    MessageBox.Show("Usuario registrado correctamente. Ahora puede iniciar sesión.", "Éxito",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    new FormLogin().Show();
+                    this.Hide();
                 }
+                else
+                {
+                    // 🔹 Edición de usuario existente
+                    registrado = UsuarioDAL.ActualizarUsuario(matriculaEditar, nombre, password, curso, seccion);
 
-                MessageBox.Show("Usuario registrado correctamente. Ahora puede iniciar sesión.", "Éxito",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // 🔹 Volver al login
-                new FormLogin().Show();
-                this.Hide();
+                    if (registrado)
+                    {
+                        MessageBox.Show("Usuario actualizado correctamente ✅", "Éxito",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al actualizar el usuario.", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -53,11 +84,9 @@ namespace SistemaVotacionesFINAL
 
         private void FormRegistro_Load(object sender, EventArgs e)
         {
-            // Fondo general neutro
             this.BackColor = Color.Gainsboro;
             this.Text = "Registro de Usuario";
 
-            // Encabezado
             Label lblTitulo = new Label();
             lblTitulo.Text = "Registro de Usuario";
             lblTitulo.Font = new Font("Segoe UI", 20, FontStyle.Bold);
@@ -67,7 +96,6 @@ namespace SistemaVotacionesFINAL
             lblTitulo.Height = 60;
             this.Controls.Add(lblTitulo);
 
-            // Etiquetas y cajas de texto
             int y = 100;
             string[] etiquetas = { "Nombre:", "Matrícula:", "Curso:", "Sección:", "Contraseña:" };
             TextBox[] cajas = { txtnombre, txtmatricula, txtcurso, txtsecc, txtcontras };
@@ -91,8 +119,7 @@ namespace SistemaVotacionesFINAL
                 y += 50;
             }
 
-            // Botón de registro
-            btnregistrofinal.Text = "Registrar Usuario";
+            btnregistrofinal.Text = string.IsNullOrEmpty(matriculaEditar) ? "Registrar Usuario" : "Guardar Cambios";
             btnregistrofinal.BackColor = Color.DimGray;
             btnregistrofinal.ForeColor = Color.White;
             btnregistrofinal.Font = new Font("Segoe UI", 12, FontStyle.Bold);
@@ -101,7 +128,6 @@ namespace SistemaVotacionesFINAL
             btnregistrofinal.FlatStyle = FlatStyle.Flat;
             btnregistrofinal.FlatAppearance.BorderSize = 0;
 
-            // Texto inferior
             Label lblFooter = new Label();
             lblFooter.Text = "Complete todos los campos antes de continuar";
             lblFooter.Font = new Font("Segoe UI", 9, FontStyle.Italic);
@@ -111,5 +137,19 @@ namespace SistemaVotacionesFINAL
             lblFooter.Height = 30;
             this.Controls.Add(lblFooter);
         }
+
+        // 🔹 Método para cargar datos en edición
+        private void CargarDatosUsuario(string matricula)
+        {
+            var usuario = UsuarioDAL.ObtenerUsuarioPorMatricula(matricula);
+            if (usuario != null)
+            {
+                txtnombre.Text = usuario.Nombre;
+                txtmatricula.Text = usuario.Matricula;
+                txtcurso.Text = usuario.Curso;
+                txtsecc.Text = usuario.Seccion;
+                txtcontras.Text = usuario.Password;
+            }
+        }
     }
-    }
+}

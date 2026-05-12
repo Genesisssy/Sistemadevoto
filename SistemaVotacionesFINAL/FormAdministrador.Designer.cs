@@ -33,9 +33,6 @@
             this.btnEditarUsuario = new System.Windows.Forms.Button();
             this.btnEliminarUsuario = new System.Windows.Forms.Button();
             this.dgvUsuarios = new System.Windows.Forms.DataGridView();
-            this.btnCrearPlancha = new System.Windows.Forms.Button();
-            this.btnEditarPlancha = new System.Windows.Forms.Button();
-            this.btnEliminarPlancha = new System.Windows.Forms.Button();
             this.dvresultado = new System.Windows.Forms.DataGridView();
             this.btnVerDetalles = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
@@ -92,36 +89,6 @@
             this.dgvUsuarios.Size = new System.Drawing.Size(444, 301);
             this.dgvUsuarios.TabIndex = 8;
             // 
-            // btnCrearPlancha
-            // 
-            this.btnCrearPlancha.Location = new System.Drawing.Point(520, 155);
-            this.btnCrearPlancha.Name = "btnCrearPlancha";
-            this.btnCrearPlancha.Size = new System.Drawing.Size(146, 47);
-            this.btnCrearPlancha.TabIndex = 9;
-            this.btnCrearPlancha.Text = "Crear Plancha";
-            this.btnCrearPlancha.UseVisualStyleBackColor = true;
-            this.btnCrearPlancha.Click += new System.EventHandler(this.btnCrearPlancha_Click);
-            // 
-            // btnEditarPlancha
-            // 
-            this.btnEditarPlancha.Location = new System.Drawing.Point(520, 211);
-            this.btnEditarPlancha.Name = "btnEditarPlancha";
-            this.btnEditarPlancha.Size = new System.Drawing.Size(146, 47);
-            this.btnEditarPlancha.TabIndex = 10;
-            this.btnEditarPlancha.Text = "Editar Plancha";
-            this.btnEditarPlancha.UseVisualStyleBackColor = true;
-            this.btnEditarPlancha.Click += new System.EventHandler(this.btnEditarPlancha_Click);
-            // 
-            // btnEliminarPlancha
-            // 
-            this.btnEliminarPlancha.Location = new System.Drawing.Point(520, 275);
-            this.btnEliminarPlancha.Name = "btnEliminarPlancha";
-            this.btnEliminarPlancha.Size = new System.Drawing.Size(146, 47);
-            this.btnEliminarPlancha.TabIndex = 11;
-            this.btnEliminarPlancha.Text = "Eliminar Plancha";
-            this.btnEliminarPlancha.UseVisualStyleBackColor = true;
-            this.btnEliminarPlancha.Click += new System.EventHandler(this.btnEliminarPlancha_Click);
-            // 
             // dvresultado
             // 
             this.dvresultado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -149,9 +116,6 @@
             this.ClientSize = new System.Drawing.Size(1119, 781);
             this.Controls.Add(this.btnVerDetalles);
             this.Controls.Add(this.dvresultado);
-            this.Controls.Add(this.btnEliminarPlancha);
-            this.Controls.Add(this.btnEditarPlancha);
-            this.Controls.Add(this.btnCrearPlancha);
             this.Controls.Add(this.dgvUsuarios);
             this.Controls.Add(this.btnEliminarUsuario);
             this.Controls.Add(this.btnEditarUsuario);
@@ -172,9 +136,6 @@
         private System.Windows.Forms.Button btnEditarUsuario;
         private System.Windows.Forms.Button btnEliminarUsuario;
         private System.Windows.Forms.DataGridView dgvUsuarios;
-        private System.Windows.Forms.Button btnCrearPlancha;
-        private System.Windows.Forms.Button btnEditarPlancha;
-        private System.Windows.Forms.Button btnEliminarPlancha;
         private System.Windows.Forms.DataGridView dvresultado;
         private System.Windows.Forms.Button btnVerDetalles;
     }

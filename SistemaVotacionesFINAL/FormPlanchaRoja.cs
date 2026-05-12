@@ -6,8 +6,8 @@ namespace SistemaVotacionesFINAL
 {
     public partial class FormPlanchaRoja : Form
     {
-        int usuarioIdActual;
-        int planchaId = 2; // Roja
+        private int usuarioIdActual;
+        private int planchaId = 2; // Roja
 
         public FormPlanchaRoja()
         {
@@ -22,6 +22,7 @@ namespace SistemaVotacionesFINAL
 
         private void FormPlanchaRoja_Load(object sender, EventArgs e)
         {
+            VotacionHelper.IniciarTimer(this, usuarioIdActual, 15, planchaId);
             // Fondo general
             this.BackColor = Color.LightCoral;
             this.Text = "Plancha Roja";
@@ -84,7 +85,7 @@ namespace SistemaVotacionesFINAL
             btnConfirmar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnConfirmar.Size = new Size(160, 45);
             btnConfirmar.Location = new Point(120, 350);
-            btnConfirmar.Click += btnconfirmarr_Click;
+            btnConfirmar.Click += BtnConfirmar_Click;
             this.Controls.Add(btnConfirmar);
 
             // Botón Volver al Menú
@@ -95,7 +96,7 @@ namespace SistemaVotacionesFINAL
             btnMenu.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnMenu.Size = new Size(160, 45);
             btnMenu.Location = new Point(320, 350);
-            btnMenu.Click += btnVolveralmenu_Click;
+            btnMenu.Click += BtnVolverAlMenu_Click;
             this.Controls.Add(btnMenu);
 
             // Botón Voto Nulo
@@ -106,11 +107,11 @@ namespace SistemaVotacionesFINAL
             btnNulo.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnNulo.Size = new Size(180, 45);
             btnNulo.Location = new Point(220, 410);
-            btnNulo.Click += btnVotonulo_Click;
+            btnNulo.Click += BtnNulo_Click;
             this.Controls.Add(btnNulo);
         }
 
-        private void btnconfirmarr_Click(object sender, EventArgs e)
+        private void BtnConfirmar_Click(object sender, EventArgs e)
         {
             if (usuarioIdActual <= 0)
             {
@@ -119,19 +120,21 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            if (VotoDAL.YaVoto(usuarioIdActual))
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
             {
                 MessageBox.Show("Ya has votado antes.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, planchaId);
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, planchaId, false);
 
             if (exito)
             {
-                MessageBox.Show("Voto registrado correctamente en Plancha Roja ✅", "Éxito",
+                MessageBox.Show("¡Voto registrado en Plancha Roja!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Hide();
+                new FormResultados().ShowDialog();
                 this.Close();
             }
             else
@@ -141,7 +144,7 @@ namespace SistemaVotacionesFINAL
             }
         }
 
-        private void btnVotonulo_Click(object sender, EventArgs e)
+        private void BtnNulo_Click(object sender, EventArgs e)
         {
             if (usuarioIdActual <= 0)
             {
@@ -150,19 +153,21 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            if (VotoDAL.YaVoto(usuarioIdActual))
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
             {
                 MessageBox.Show("Ya has votado antes.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, 0, true);
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, 0, true);
 
             if (exito)
             {
                 MessageBox.Show("¡Voto nulo registrado!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Hide();
+                new FormResultados().ShowDialog();
                 this.Close();
             }
             else
@@ -172,11 +177,10 @@ namespace SistemaVotacionesFINAL
             }
         }
 
-        private void btnVolveralmenu_Click(object sender, EventArgs e)
+        private void BtnVolverAlMenu_Click(object sender, EventArgs e)
         {
             this.Hide();
             new FormMenu("Votante", "Roja", "Usuario", usuarioIdActual).Show();
         }
     }
 }
-

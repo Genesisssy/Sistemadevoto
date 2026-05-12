@@ -6,8 +6,8 @@ namespace SistemaVotacionesFINAL
 {
     public partial class FormPlanchaAzul : Form
     {
-        int usuarioIdActual;
-        int planchaId = 1; // Azul
+        private int usuarioIdActual;
+        private int planchaId = 1; // Azul
 
         public FormPlanchaAzul()
         {
@@ -22,6 +22,7 @@ namespace SistemaVotacionesFINAL
 
         private void FormPlanchaAzul_Load(object sender, EventArgs e)
         {
+            VotacionHelper.IniciarTimer(this, usuarioIdActual, 15, planchaId);
             // Fondo general
             this.BackColor = Color.LightSteelBlue;
             this.Text = "Plancha Azul";
@@ -84,7 +85,7 @@ namespace SistemaVotacionesFINAL
             btnConfirmar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnConfirmar.Size = new Size(160, 45);
             btnConfirmar.Location = new Point(120, 350);
-            btnConfirmar.Click += btnConfirmarVoto_Click;
+            btnConfirmar.Click += BtnConfirmarVoto_Click;
             this.Controls.Add(btnConfirmar);
 
             // Botón Volver al Menú
@@ -95,7 +96,7 @@ namespace SistemaVotacionesFINAL
             btnMenu.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnMenu.Size = new Size(160, 45);
             btnMenu.Location = new Point(320, 350);
-            btnMenu.Click += btnvolveralmenuu_Click;
+            btnMenu.Click += BtnVolverAlMenu_Click;
             this.Controls.Add(btnMenu);
 
             // Botón Voto Nulo
@@ -106,17 +107,17 @@ namespace SistemaVotacionesFINAL
             btnNulo.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             btnNulo.Size = new Size(180, 45);
             btnNulo.Location = new Point(220, 410);
-            btnNulo.Click += btnNulo_Click_1;
+            btnNulo.Click += BtnNulo_Click;
             this.Controls.Add(btnNulo);
         }
 
-        private void btnvolveralmenuu_Click(object sender, EventArgs e)
+        private void BtnVolverAlMenu_Click(object sender, EventArgs e)
         {
             this.Hide();
             new FormMenu("Votante", "Azul", "Usuario", usuarioIdActual).Show();
         }
 
-        private void btnConfirmarVoto_Click(object sender, EventArgs e)
+        private void BtnConfirmarVoto_Click(object sender, EventArgs e)
         {
             if (usuarioIdActual <= 0)
             {
@@ -125,19 +126,21 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            if (VotoDAL.YaVoto(usuarioIdActual))
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
             {
                 MessageBox.Show("Ya has votado antes.", "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, planchaId);
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, planchaId, false);
 
             if (exito)
             {
-                MessageBox.Show("Voto registrado correctamente en Plancha Azul ✅", "Éxito",
+                MessageBox.Show("¡Voto registrado en Plancha Azul!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Hide();
+                new FormResultados().ShowDialog();
                 this.Close();
             }
             else
@@ -147,7 +150,7 @@ namespace SistemaVotacionesFINAL
             }
         }
 
-        private void btnNulo_Click_1(object sender, EventArgs e)
+        private void BtnNulo_Click(object sender, EventArgs e)
         {
             if (usuarioIdActual <= 0)
             {
@@ -156,14 +159,22 @@ namespace SistemaVotacionesFINAL
                 return;
             }
 
-            bool exito = VotoDAL.RegistrarVoto(usuarioIdActual, 0, true);
+            if (UsuarioDAL.YaVoto(usuarioIdActual))
+            {
+                MessageBox.Show("Ya has votado antes.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool exito = UsuarioDAL.RegistrarVoto(usuarioIdActual, 0, true);
             if (exito)
             {
                 MessageBox.Show("¡Voto nulo registrado!", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.Hide();
-                new FormResultados().Show();
+                new FormResultados().ShowDialog();
+                this.Close();
             }
             else
             {
@@ -173,4 +184,3 @@ namespace SistemaVotacionesFINAL
         }
     }
 }
-
